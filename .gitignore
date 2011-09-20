@@ -1,0 +1,7 @@
+# zend tool xml file
+.zfproject.xml
+
+# eclipse files
+.project
+.buildpath
+.settings
