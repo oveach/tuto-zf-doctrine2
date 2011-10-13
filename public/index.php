@@ -1,5 +1,9 @@
 <?php
 
+// Define path to root directory (ajouté par ovh, car constante pratique)
+defined('ROOT_PATH')
+    || define('ROOT_PATH', realpath(dirname(__FILE__) . '/..'));
+
 // Define path to application directory
 defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
@@ -14,7 +18,6 @@ set_include_path(implode(PATH_SEPARATOR, array(
     get_include_path(),
 )));
 
-/** Zend_Application */
 require_once 'Zend/Application.php';
 
 // Create application, bootstrap, and run
