@@ -6,7 +6,7 @@ namespace Entities;
  * @Table(name="user")
  *
  */
-class User
+class User extends Entity
 {
     /**
      * @var int
@@ -15,49 +15,22 @@ class User
      * @Id
      * @GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
     
     /**
      * @var string
      * 
      * @Column(name="login", type="string", length="50", nullable=false)
      */
-    private $login;
+    protected $login;
     
     /**
      * @var string
      * 
      * @Column(name="password", type="string", length="40", nullable=false)
      */
-    private $password;
+    protected $password;
     
-    
-    public function getId()
-    {
-        return $this->id;
-    }
-    
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-    
-    public function getLogin()
-    {
-        return $this->login;
-    }
-    
-    public function setLogin($login)
-    {
-        $this->login = $login;
-        return $this;
-    }
-    
-    public function getPassword()
-    {
-        return $this->password;
-    }
     
     public function setPassword($password)
     {
