@@ -10,4 +10,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return $config;
     }
     
+    protected function _initHelpers()
+    {
+        Zend_Controller_Action_HelperBroker::addPrefix('Application_Helper');
+    }
+    
 }
