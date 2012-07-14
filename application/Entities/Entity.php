@@ -63,7 +63,10 @@ abstract class Entity
         foreach ($properties as $name => $value) {
             //  supprime les propriétés de type objet pour éviter d'avoir trop de niveaux de sérialisation
             if (is_object($this->$name)) {
-                unset($properties[$name]);
+                // exception pour le type DateTime qui doit bien sûr être pris en compte
+                if (!$this->$name instanceof \DateTime) {
+                    unset($properties[$name]);
+                }
             }
         }
         return array_merge($properties);
