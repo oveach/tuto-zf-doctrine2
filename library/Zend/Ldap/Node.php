@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage Node
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Node.php 23775 2011-03-01 17:25:24Z ralph $
+ * @version    $Id: Node.php 24615 2012-01-23 15:49:10Z sgehrig $
  */
 
 /**
@@ -35,7 +35,7 @@ require_once 'Zend/Ldap/Node/Abstract.php';
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage Node
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Ldap_Node extends Zend_Ldap_Node_Abstract implements Iterator, RecursiveIterator
@@ -319,12 +319,17 @@ class Zend_Ldap_Node extends Zend_Ldap_Node_Abstract implements Iterator, Recurs
     /**
      * Ensures that teh RDN attributes are correctly set.
      *
+     * @param  boolean    $overwrite    True to overwrite the RDN attributes
      * @return void
      */
-    protected function _ensureRdnAttributeValues()
+    protected function _ensureRdnAttributeValues($overwrite = false)
     {
         foreach ($this->getRdnArray() as $key => $value) {
-            Zend_Ldap_Attribute::setAttribute($this->_currentData, $key, $value, false);
+            if (!array_key_exists($key, $this->_currentData) || $overwrite) {
+                Zend_Ldap_Attribute::setAttribute($this->_currentData, $key, $value, false);
+            } else if (!in_array($value, $this->_currentData[$key])) {
+                Zend_Ldap_Attribute::setAttribute($this->_currentData, $key, $value, true);
+            }
         }
     }
 
@@ -501,7 +506,7 @@ class Zend_Ldap_Node extends Zend_Ldap_Node_Abstract implements Iterator, Recurs
         } else {
             $this->_newDn = Zend_Ldap_Dn::factory($newDn);
         }
-        $this->_ensureRdnAttributeValues();
+        $this->_ensureRdnAttributeValues(true);
         return $this;
     }
 

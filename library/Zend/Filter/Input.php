@@ -14,9 +14,9 @@
  *
  * @category   Zend
  * @package    Zend_Filter
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Input.php 24268 2011-07-25 14:47:42Z guilhermeblanco $
+ * @version    $Id: Input.php 24594 2012-01-05 21:27:01Z matthew $
  */
 
 /**
@@ -37,7 +37,7 @@ require_once 'Zend/Validate.php';
 /**
  * @category   Zend
  * @package    Zend_Filter
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Filter_Input
@@ -848,6 +848,19 @@ class Zend_Filter_Input
                         break 1;
                     }
                     
+                    if (is_array($rule)) {
+                        $keys      = array_keys($rule);
+                        $classKey  = array_shift($keys);
+                        if (isset($rule[$classKey])) {
+                            $ruleClass = $rule[$classKey];
+                            if ($ruleClass === 'NotEmpty') {
+                                $foundNotEmptyValidator = true;
+                                // field may not be empty, we are ready
+                                break 1;
+                            }
+                        }
+                    }
+
                     // we must check if it is an object before using instanceof
                     if (!is_object($rule)) {
                         // it cannot be a NotEmpty validator, skip this one
@@ -1074,7 +1087,7 @@ class Zend_Filter_Input
                 $validatorChain->addValidator($validatorRule[self::VALIDATOR_CHAIN]);
             }
 
-            foreach ($field as $value) {
+            foreach ($field as $key => $value) {
                 if ($validatorRule[self::ALLOW_EMPTY]  &&  !$notEmptyValidator->isValid($value)) {
                     // Field is empty AND it's allowed. Do nothing.
                     continue;
