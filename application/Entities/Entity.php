@@ -5,17 +5,11 @@ namespace Entities;
  * Classe de base pour toutes les entités offrant quelques méthodes utiles
  *
  */
-class Entity {
-    
-    protected $_em = null;
-    
-    public function __construct()
-    {
-        $this->_em = $this->getEntityManager();
-    }
+abstract class Entity
+{
     
     /**
-     * Méthode intelligente pour récupérer un champ
+     * Méthode intelligente pour récupérer la valeur d'un champ
      * @param string $name
      * @return mixed
      */
@@ -33,7 +27,7 @@ class Entity {
      * Méthode intelligente pour valoriser un champ
      * @param string $name
      * @param mixed $value
-     * @return mixed
+     * @return Entities\Entity
      */
     public function __set($name, $value)
     {
@@ -44,15 +38,6 @@ class Entity {
             $this->$name = $value;
             return $this;
         }
-    }
-    
-    /**
-     * Récupère l'em commun au projet
-     * @return Doctrine\ORM\EntityManager
-     */
-    public function getEntityManager()
-    {
-        return \Zend_Registry::get('em');
     }
     
     /**
@@ -69,17 +54,19 @@ class Entity {
     }
     
     /**
-     * Construit un tableau associatif avec les propriétés de l'entité en utilisant l'introspection de Doctrine
+     * Construit un tableau associatif avec les propriétés de l'entité
      * @return array
      */
     public function toArray()
     {
-        $result = array();
-        $metadata = $this->getEntityManager()->getClassMetadata(get_class($this));
-        foreach ($metadata->fieldNames as $property) {
-            $result[$property] = $this->__get($property);
+        $properties = get_object_vars($this);
+        foreach ($properties as $name => $value) {
+            //  supprime les propriétés de type objet pour éviter d'avoir trop de niveaux de sérialisation
+            if (is_object($this->$name)) {
+                unset($properties[$name]);
+            }
         }
-        return $result;
+        return array_merge($properties);
     }
     
 }
