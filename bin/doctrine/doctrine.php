@@ -44,7 +44,7 @@ $classLoader->register();
 $classLoader = new \Doctrine\Common\ClassLoader('Symfony', 'Doctrine');
 $classLoader->register();
 
-$configFile = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'cli-config.php';
+$configFile = getcwd() . DIRECTORY_SEPARATOR . 'cli-config.php';
 
 $helperSet = null;
 if (file_exists($configFile)) {

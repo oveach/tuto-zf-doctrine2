@@ -20,14 +20,14 @@ class User extends Entity
     /**
      * @var string
      * 
-     * @Column(name="login", type="string", length="50", nullable=false)
+     * @Column(name="login", type="string", length=50, nullable=false)
      */
     protected $login;
     
     /**
      * @var string
      * 
-     * @Column(name="password", type="string", length="40", nullable=false)
+     * @Column(name="password", type="string", length=40, nullable=false)
      */
     protected $password;
     
